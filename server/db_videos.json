@@ -1,0 +1,16 @@
+{
+  "todos": [
+    {
+      "todo": "assignment todo",
+      "completed": true,
+      "priority_color": "red",
+      "id": 1
+    },
+    {
+      "todo": "class todo",
+      "completed": true,
+      "priority_color": "yellow",
+      "id": 2
+    }
+  ]
+}
