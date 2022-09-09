@@ -1,15 +1,15 @@
 import React from 'react';
-import { useAddTodoCompleteStatusMutation, useAddTodoPriorityMutation } from '../features/api/apiSlice';
+import { useAddTodoCompleteStatusMutation, useAddTodoPriorityMutation, useDeleteTodoMutation } from '../features/api/apiSlice';
 import deleteImg from '../resourses/images/cancel.png'
 
 const Todo = ({ todo }) => {
     const { id, todo: todoText, completed, priority_color } = todo;
     const [addTodoPriority, { isError, isLoading }] = useAddTodoPriorityMutation();
-    const [addTodoCompleteStatus, { }] = useAddTodoCompleteStatusMutation()
+    const [addTodoCompleteStatus, { }] = useAddTodoCompleteStatusMutation();
+    const [deleteTodo,{}] =useDeleteTodoMutation()
 
 
     const handlePriority = (PriorityColor) => {
-
         addTodoPriority({
             id,
             data: {
@@ -19,7 +19,6 @@ const Todo = ({ todo }) => {
     }
 
     const handleChangeCompleteStatus = () => {
-
         addTodoCompleteStatus(
             {
                 id,
@@ -27,6 +26,10 @@ const Todo = ({ todo }) => {
                     completed:!completed
                 }
             })
+    }
+
+    const handleDelete = () =>{
+        deleteTodo(id)
     }
 
 
@@ -72,6 +75,7 @@ const Todo = ({ todo }) => {
             ></div>
 
             <img
+                onClick={handleDelete}
                 src={deleteImg}
                 className="flex-shrink-0 w-4 h-4 ml-2 cursor-pointer"
                 alt="Cancel"
