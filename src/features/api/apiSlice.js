@@ -3,9 +3,10 @@ import { createApi,fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 export const apiSlice = createApi({
     reducerPath:'api',
     baseQuery:fetchBaseQuery({
-        baseUrl:'http://localhost:9000'
+        // baseUrl:'http://localhost:8000'
+        baseUrl:'https://react-redux-json-server.herokuapp.com'
     }),
-    tagTypes:['todos',],
+    tagTypes:['todos'],
 
     endpoints:(builder)=>({
 
@@ -45,6 +46,14 @@ export const apiSlice = createApi({
             }),
             invalidatesTags:()=>['todos']
         }),
+        updateTodo:builder.mutation({
+            query:({id,data})=>({
+                url:`/todos/${id}`,
+                method:'PATCH',
+                body:data
+            }),
+            invalidatesTags:()=>['todos']
+        }),
         deleteTodo: builder.mutation({
             query:(id)=>({
                 url:`/todos/${id}`,
@@ -55,4 +64,4 @@ export const apiSlice = createApi({
     })
 });
 
-export const {useAddTodoMutation,useGetTodoQuery,useAddTodoPriorityMutation,useAddTodoCompleteStatusMutation,useDeleteTodoMutation} =apiSlice
+export const {useAddTodoMutation,useGetTodoQuery,useAddTodoPriorityMutation,useAddTodoCompleteStatusMutation,useDeleteTodoMutation,useUpdateTodoMutation} =apiSlice

@@ -6,9 +6,10 @@ import { colorRemoved, colorSelected, todoStatus } from '../features/filter/filt
 
 const Footer = () => {
     const { data: todos, isLoading } = useGetTodoQuery();
-    const incompleteTodos = todos?.filter(todo => todo?.completed === false);
     const dispatch = useDispatch();
-    const { color: colorArr, status } = useSelector(state => state.filter)
+    const { color: colorArr, status } = useSelector(state => state?.filter)
+    
+    const incompleteTodos = todos?.filter(todo => todo?.completed === false);
 
     const numberOfTodos = (todos) => {
         switch (todos) {

@@ -1,0 +1,16 @@
+{
+  "todos": [
+    {
+      "todo": "fdfsdf",
+      "completed": true,
+      "priority_color": "red",
+      "id": 1
+    },
+    {
+      "todo": "dfsfaf",
+      "completed": false,
+      "priority_color": "",
+      "id": 2
+    }
+  ]
+}

@@ -1,12 +1,17 @@
-import React from 'react';
-import { useAddTodoCompleteStatusMutation, useAddTodoPriorityMutation, useDeleteTodoMutation } from '../features/api/apiSlice';
-import deleteImg from '../resourses/images/cancel.png'
+import React, { useEffect, useState } from 'react';
+import { useAddTodoCompleteStatusMutation, useAddTodoPriorityMutation, useDeleteTodoMutation, useUpdateTodoMutation } from '../features/api/apiSlice';
+import deleteImg from '../resourses/images/cancel.png';
+import editImg from '../resourses/images/edit.png';
+import updateImg from '../resourses/images/update.png';
 
 const Todo = ({ todo }) => {
     const { id, todo: todoText, completed, priority_color } = todo;
     const [addTodoPriority, { isError, isLoading }] = useAddTodoPriorityMutation();
     const [addTodoCompleteStatus, { }] = useAddTodoCompleteStatusMutation();
-    const [deleteTodo,{}] =useDeleteTodoMutation()
+    const [updateTodo, { isLoading: updateLoading, isError: updateError, isSuccess: updateSuccess }] = useUpdateTodoMutation()
+    const [deleteTodo, { }] = useDeleteTodoMutation();
+    const [updateTodoItem, setUpdateTodoItem] = useState(todoText);
+    const [editMode, setEditMode] = useState(false);
 
 
     const handlePriority = (PriorityColor) => {
@@ -23,16 +28,31 @@ const Todo = ({ todo }) => {
             {
                 id,
                 data: {
-                    completed:!completed
+                    completed: !completed
                 }
             })
     }
 
-    const handleDelete = () =>{
+    const handleDelete = () => {
         deleteTodo(id)
     }
 
+    const handleEditMode = () => {
+        setEditMode((pre) => !pre)
+    }
 
+    const handleUpdate = ()=>{
+        updateTodo({
+            id,
+            data:{
+                'todo':updateTodoItem
+            }
+        })
+    }
+
+    useEffect(()=>{
+        setEditMode(false)
+    },[updateSuccess])
 
     return (
         <div
@@ -55,7 +75,20 @@ const Todo = ({ todo }) => {
             </div>
 
             <div className={`select-none flex-1 ${completed && 'line-through'}`}>
-                {todoText}
+                {!editMode && todoText}
+                {
+                    editMode && <div className='flex items-center'>
+                        <input className='border' value={updateTodoItem} onChange={e => setUpdateTodoItem(e.target.value)} />
+                        <img
+                            
+                            onClick={handleUpdate}
+                            src={updateImg}
+                            className="flex-shrink-0 w-4 h-4 ml-2 cursor-pointer"
+                            alt="Update"
+                        />
+                    </div>
+                }
+
             </div>
 
             <div
@@ -75,6 +108,13 @@ const Todo = ({ todo }) => {
             ></div>
 
             <img
+                onClick={handleEditMode}
+                src={editImg}
+                className="flex-shrink-0 w-4 h-4 ml-2 cursor-pointer"
+                alt="Edit"
+            />
+            <img
+                disabled={true}
                 onClick={handleDelete}
                 src={deleteImg}
                 className="flex-shrink-0 w-4 h-4 ml-2 cursor-pointer"

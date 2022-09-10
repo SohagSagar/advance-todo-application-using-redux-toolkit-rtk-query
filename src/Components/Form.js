@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useAddTodoMutation } from '../features/api/apiSlice';
 import addTodoNote from '../resourses/images/notes.png';
 import Error from '../utilities/Error';
 
 const Form = () => {
-    const [addTodo, { isError, isLoading }] = useAddTodoMutation();
+    const [addTodo, { isError, isLoading, isSuccess }] = useAddTodoMutation();
     const [todoText, setTodoText] = useState('');
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -15,6 +15,13 @@ const Form = () => {
         }
         addTodo(data);
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            setTodoText('')
+        }
+    }, [isSuccess]);
+
     return (
         <div>
             <form onSubmit={handleSubmit} className="flex items-center bg-gray-100 px-4 py-4 rounded-md"  >
@@ -25,6 +32,7 @@ const Form = () => {
                 />
                 <input
                     required
+                    value={todoText}
                     onChange={e => setTodoText(e.target.value)}
                     type="text"
                     placeholder="Type your todo"
@@ -34,7 +42,7 @@ const Form = () => {
                 <button disabled={isLoading} type="submit" >Add</button>
             </form>
             {
-                isError && <Error />  
+                isError && <Error />
             }
         </div>
     );
